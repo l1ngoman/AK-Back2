@@ -62,7 +62,7 @@ export default class AuthService {
     if(token===null){
       console.log("No token available.");
     }else{
-  		parsedToken = token.split(' ')[1]
+  		parsedToken = token.split('.')[1]
   		localStorage.setItem('id_token', parsedToken)
     }
 	}
@@ -78,11 +78,10 @@ export default class AuthService {
 	}
 
 	getUserId = () => {
-		const token = decode(this.getToken(),{
-			header: true
-		});
-		return token.sub
-	}
+			const token = decode(this.getToken(), { header:true, payload: true });
+			console.log(token.sub);
+			return token.sub
+		}
 
 	authFetch = (url, options) => {
 		const headers = {

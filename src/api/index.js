@@ -74,8 +74,8 @@ let editApartment = function(apt){
   })
 }
 
-let getUserName = function(user_id){
-  return authFetch(BASE + `/users/${user_id}`)
+let getProfile = function(user_id){
+  return authFetch(BASE + `/profiles/${user_id}`)
   .then(resp => {
     console.log(resp);
     let json = resp.json()
@@ -104,4 +104,4 @@ let authFetch = (url, options) => {
   })
 }
 
-export { getApartments, getApartment, createApartment, deleteApartment, getUserApartments, editApartment, getUserName }
+export { getApartments, getApartment, createApartment, deleteApartment, getUserApartments, editApartment, getProfile }

@@ -10,7 +10,8 @@ import EditApartment from './pages/editApartment'
 import About from './pages/about'
 import AuthService from './services'
 import MyApartments from './pages/myApartments'
-import { getUserName } from './api'
+import Profile from './pages/profile'
+import { getProfile } from './api'
 
 
 class App extends Component {
@@ -20,15 +21,24 @@ class App extends Component {
     this.auth = new AuthService()
     this.state = {
       hasToken: false,
-      user: {
-        name: ''
+      profile: {
+        user_id: '',
+        first_name: '',
+        last_name: '',
+        full_name: '',
+        phone: ''
       }
     }
   }
   render() {
     return (
       <div id="big">
-        <Header checkForToken={this.checkForToken} hasToken={this.state.hasToken} username={this.state.user.name}/>
+        <Header
+          checkForToken={this.checkForToken}
+          hasToken={this.state.hasToken}
+          username={this.state.profile.first_name}
+          user_id={this.state.profile.user_id}
+          />
         <Router>
           {(this.auth.loggedIn())
           ?<Switch> //protected paths
@@ -36,6 +46,7 @@ class App extends Component {
             <Route exact path='/apartments/:id/edit' component={EditApartment} /> //protected
             <Route exact path='/apartments/:id' component={Apartment} />
             <Route exact path='/login' render={(props) => <Login checkForToken={this.checkForToken}/>} />
+            <Route exact path='/profiles/:id' render={(props) => <Profile profile={this.state.profile} />}/>
             <Route exact path='/register' component={Register} />
             <Route exact path='/my_apartments' component={MyApartments} />
             <Route exact path='/about' component={About} />
@@ -47,6 +58,7 @@ class App extends Component {
             <Redirect from='/apartments/new' to="/login" />
             <Redirect from='/apartments/:id/edit' to="/login" />
             <Redirect from='/my_apartments' to="/login" />
+            <Redirect from='/profiles/:id' to="/login" />
             <Route exact path='/apartments/:id' component={Apartment} />
             <Route exact path='/login' render={(props) => <Login checkForToken={this.checkForToken}/>} />
             <Route exact path='/register' component={Register} />
@@ -60,7 +72,13 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log(getUserName(1));
+    console.log(this.auth.getUserId());
+    let { profile } = this.state
+    getProfile(this.auth.getUserId())
+    .then(APIprofile => {
+      console.log(APIprofile);
+      this.setState({profile: APIprofile})
+    })
   }
 
 checkForToken = () => {

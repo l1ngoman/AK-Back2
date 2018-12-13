@@ -31,10 +31,10 @@ class Nav extends Component {
             <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul className="nav navbar-nav">
                 <li><a href="/about">About</a></li>
-                <li><a href="#">Contact</a></li>
                 {!this.auth.loggedIn() && <li><a href="/register">Join</a></li>}
                 {this.auth.loggedIn() && <li><a href="/apartments/new">New</a></li>}
                 {this.auth.loggedIn() && <li><a href="/my_apartments">My Apartments</a></li>}
+                {this.auth.loggedIn() && <li><a href={`/profiles/${this.props.user_id}`}>My Profile</a></li>}
               </ul>
               <ul className="nav navbar-nav navbar-right">
                 {this.auth.loggedIn() && <li><a onClick={this.handleLogout} href="/login">Sign Out</a></li>}
